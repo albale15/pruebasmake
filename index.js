@@ -7,12 +7,12 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Inicializar Firebase Admin
-const serviceAccount = require('./etc/secrets/testingfirebasev1-dc422-firebase-adminsdk-fbsvc-9521e1f5e7.json'); // <- Este es tu archivo descargado
+// Leer la variable de entorno que configuraste en Render
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://testingfirebasev1-dc422-default-rtdb.firebaseio.com/' // <- Cambia esto por el de tu proyecto
+  databaseURL: 'https://testingfirebasev1-dc422-default-rtdb.firebaseio.com/' // Cambia por tu URL de Firebase
 });
 
 const db = admin.database();
