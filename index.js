@@ -8,11 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 // Leer la variable de entorno que configuraste en Render
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+const serviceAccount = require('/secrets/firebaseServiceAccount.json'); // NO uses process.env acá
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://testingfirebasev1-dc422-default-rtdb.firebaseio.com/' // Cambia por tu URL de Firebase
+  databaseURL: 'https://testingfirebasev1-dc422-default-rtdb.firebaseio.com/' // tu URL
 });
 
 const db = admin.database();
