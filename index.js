@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // Leer la variable de entorno que configuraste en Render
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n'));
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
