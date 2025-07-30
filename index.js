@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // Leer la variable de entorno que configuraste en Render
-const serviceAccount = require('/secrets/firebaseServiceAccount.json'); // NO uses process.env acá
+const serviceAccount = require('/etc/secrets/firebaseServiceAccount.json'); // NO uses process.env acá
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
