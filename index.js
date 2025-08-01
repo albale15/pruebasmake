@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
@@ -48,6 +49,60 @@ app.get('/verificar-invitado/:username', async (req, res) => {
   }
 });
 
+app.listen(port, () => {
+  console.log(`Servidor en http://localhost:${port}`);
+});
+*/
+const express = require('express');
+const cors = require('cors');
+const admin = require('firebase-admin');
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// Ruta del archivo secreto
+const serviceAccount = require('/etc/secrets/firebaseServiceAccount.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://testingfirebasev1-dc422-default-rtdb.firebaseio.com/'
+});
+
+const db = admin.database();
+
+
+// POST para sumar +1 al contador
+app.post('/sumar-like', async (req, res) => {
+  try {
+    const ref = db.ref('contadorLikes');
+
+    await ref.transaction((currentValue) => {
+      return (currentValue || 0) + 1;
+    });
+
+    res.json({ mensaje: 'Like sumado correctamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// GET para obtener el número de likes actuales
+app.get('/contador-likes', async (req, res) => {
+  try {
+    const snapshot = await db.ref('contadorLikes').once('value');
+    const totalLikes = snapshot.val() || 0;
+
+    res.json({ totalLikes });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Iniciar servidor
 app.listen(port, () => {
   console.log(`Servidor en http://localhost:${port}`);
 });
